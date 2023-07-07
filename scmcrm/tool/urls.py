@@ -5,7 +5,9 @@ from .views import user
 
 urlpatterns = (
     path("", index.index, name='index'),
-    path('user/', user.index, name='userindex'),
+
+    # 用户管理路由
+    path('user/<int:pIndex>', user.index, name='userindex'),
     path('user/add', user.add, name='useradd'),   # 加载添加用户页面
     path('user/insert', user.insert, name='userinsert'),  # 加载添加用户页面
     path('user/edit', user.edit, name='useredit'),

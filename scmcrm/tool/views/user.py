@@ -1,15 +1,28 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 from datetime import datetime
 from ..models import User
 # Create your views here.
 
 # 用户管理界面
-def index(request):
+def index(request, pIndex=1):
     # 用户列表页
-    return render(request,"user/index.html",{"data":"欢迎进入Tool，后台管理系统"})
+    ob = User.objects
+    oblist = ob.all()
+    pIndex = int (pIndex)
+    page = Paginator(oblist,10)
+    maxpages = page.num_pages
+    if pIndex > maxpages:
+        pIndex = maxpages
+    if pIndex < 1:
+        pIndex = 1
+    list2 = page.page(pIndex)  # 获取当前页数据
+    plist = page.page_range  # 获取页码列表信息
+    context = {"userlist": list2,'plist': plist,'pIndex': pIndex,'maxpages': maxpages,}
 
+    return render(request,"user/index.html",context)
 def add(request):
     # 用户新增界面加载
     return render(request, "user/add.html" )
@@ -17,6 +30,13 @@ def add(request):
 def insert(request):
     # 用户新增界面执行数据库操作
     try:
+
+        # 创建用户前先判断用户是否存在
+        f = User.objects
+        if f.filter(username=request.POST['username']).count() >= 1:
+            context = {"messages": True,"success": "失败","data": "用户名已存在"}
+            return render(request,"user/add.html",context)
+
         ob = User()
         ob.username = request.POST['username']
         ob.nickname = request.POST['nickname']
@@ -32,11 +52,11 @@ def insert(request):
         ob.create_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.save()
-        context = {'info': "添加成功！", "url": "userindex"}
+        context = {"messages": True, "success": "成功", "data": "用户：" + request.POST['username'] + "创建成功！"}
     except Exception as err:
         print(err)
-        context = {'info': "添加失败！", "url": "userindex"}
-    return render(request, "info.html", context)
+        context = {"messages": True, "success": "失败", "data": err}
+    return render(request, "user/add.html", context)
 def edit(request):
     # 用户新增界面加载
     return render(request, "user/edit.html", {"data":"欢迎进入Tool，后台管理系统"})
