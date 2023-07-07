@@ -31,7 +31,7 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="{% url 'toolindex' %}" class="logo">
+    <a href="{% url 'index' %}" class="logo">
       <!-- 侧栏迷你徽标 mini 50x50 pixels -->
       <span class="logo-mini"><b>SCM</b></span>
       <!-- 常规状态标志和移动设备标志 -->
@@ -201,9 +201,9 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header"></li>
         <!-- 导航列表，你可以自行更改图标 -->
-        <li class="active"><a href="{% url 'toolindex' %}"><i class="fa fa-home"></i> <span>首页</span></a></li>
+        <li class="active"><a href="{% url 'index' %}"><i class="fa fa-home"></i> <span>首页</span></a></li>
 
-        <li><a href="{% url 'Userindex' %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+        <li><a href="{% url 'userindex' %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-sitemap"></i> <span>客户管理</span>
             <span class="pull-right-container">
@@ -244,7 +244,7 @@
 <!-- ./wrapper -->
 
 <!-- edu-model提示框模板 -->
-<div id="edu-alert" class="modal">
+<div id="edu-alert" class="modal" >
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
@@ -275,24 +275,7 @@
 <script src="{% static 'myadmin/dist/js/edu-modal-alert-confirm.js'%}"></script>
 
 <!-- 此处可以添加SimLoopl和FastClick插件，用于增强用户体验。 -->
-
-<script type="text/javascript">
-    /*
-	function doDel(url){
-    Modal.confirm({
-        msg: "确定要删除吗？",
-        title: ' 信息提示',
-        btnok: '确定',
-        btncl:'取消'
-      }).on(function (e){
-        if(e){
-          window.location.href=url;
-          //Modal.alert({msg: "成功删除",title: ' 信息提示',btnok: '确定',btncl:'取消'});
-        }
-      });
-
-  }
-  */
-</script>
+ {% block main_mssage %}
+ {% endblock %}
 </body>
 </html>

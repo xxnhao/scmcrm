@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block main_mssage %}
+    <script type="text/javascript">
+        Modal.alert({
+            msg: "{{ info }}",
+            title: '信息提示',
+            btnok: '确定',
+            btncl:'取消'
+        }).on(function (e){
+            if (e){
+                window.location.href= {% url  url  %};
+            }
+        });
+        /*
+        Modal.confirm({
+            msg: "{{ info }}",
+            title: ' 信息提示',
+            btnok: '确定',
+            btncl: '取消'
+          }).on(function (e){
+            if(e){
+             // window.location.href= {% url  url  %};
+              Modal.alert({msg: "成功删除",title: ' 信息提示',btnok: '确定',btncl:'取消'});
+            }
+          });
+          */
+    </script>
+{% endblock %}

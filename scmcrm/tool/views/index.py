@@ -4,6 +4,6 @@ from django.http import HttpResponse
 # Create your views here.
 
 
-def toolindex(request):
+def index(request):
     # 首页
     return render(request,"index/index.html",{"data":"欢迎进入Tool，后台管理系统"})
