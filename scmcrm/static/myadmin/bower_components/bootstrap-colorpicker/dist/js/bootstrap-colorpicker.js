@@ -222,7 +222,7 @@
 
   Color.prototype = {
     constructor: Color,
-    colors: {}, // merged web and predefined colors
+    colors: {}, // merged Customer.py and predefined colors
     predefinedColors: {},
     /**
      * @return {Object}

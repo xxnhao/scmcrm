@@ -211,7 +211,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"> <i class="fa fa-circle-o"></i> 客户信息维护</a></li>
+            <li><a href="{% url 'Customerindex' 1 %}"> <i class="fa fa-circle-o"></i> 客户信息维护</a></li>
             <li><a href="#"> <i class="fa fa-circle-o"></i> 客户续费查询</a></li>
           </ul>
         </li>
@@ -275,20 +275,29 @@
 <script src="{% static 'myadmin/dist/js/edu-modal-alert-confirm.js'%}"></script>
 
 <!-- 此处可以添加SimLoopl和FastClick插件，用于增强用户体验。 -->
+<script type="text/javascript">
 
-{% if messages %}
-    <script type="text/javascript">
-    Modal.alert({
-        msg: "{{ data }}",
-        title: "{{ success }}",
+    function del(url){
+        Modal.confirm({
+        msg: "确定要删除吗？",
+        title: ' 信息提示',
         btnok: '确定',
         btncl:'取消'
-    }).on(function (e){
-        if (e){
-           // window.location.href= "";
+      }).on(function (e){
+        if(e){
+          window.location.href=url;
+          //Modal.alert({msg: "成功删除",title: ' 信息提示',btnok: '确定',btncl:'取消'});
         }
-    });
-   </script>
+      });
+    }
+
+    /**
+     * 信息框，show_popup 为 True，弹出
+     */
+    {% if show_popup %}
+    Modal.alert({msg: "{{ popup_data }}",title: ' {{ success }}',btnok: '确定',btncl:'取消'}).on( function (e){
+    })
 {% endif %}
+</script>
 </body>
 </html>

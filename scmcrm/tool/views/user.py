@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.db.models import Q
 from datetime import datetime
 from ..models import User
 # Create your views here.
@@ -11,18 +12,29 @@ def index(request, pIndex=1):
     # 用户列表页
     ob = User.objects
     oblist = ob.all()
-    pIndex = int (pIndex)
-    page = Paginator(oblist,10)
-    maxpages = page.num_pages
-    if pIndex > maxpages:
-        pIndex = maxpages
+    where = []
+
+    key = request.GET.get("keyword", None)
+    print(key)
+    if key:
+        oblist = oblist.filter(Q(nickname__contains=key))
+        where.append('keyword=' + key)
+        print(where)
+
+
+    # 分页处理
+    pIndex = int(pIndex)
+    page = Paginator(oblist, 10)  # 最大10条数据分页
+    max_pages = page.num_pages
+    if pIndex > max_pages:
+        pIndex = max_pages
     if pIndex < 1:
         pIndex = 1
     list2 = page.page(pIndex)  # 获取当前页数据
     plist = page.page_range  # 获取页码列表信息
-    context = {"userlist": list2,'plist': plist,'pIndex': pIndex,'maxpages': maxpages,}
+    context = {"userlist": list2, 'plist': plist, 'pIndex': pIndex, 'max_pages': max_pages, 'key': where}
 
-    return render(request,"user/index.html",context)
+    return render(request, "user/index.html", context)
 def add(request):
     # 用户新增界面加载
     return render(request, "user/add.html" )
@@ -30,13 +42,6 @@ def add(request):
 def insert(request):
     # 用户新增界面执行数据库操作
     try:
-
-        # 创建用户前先判断用户是否存在
-        f = User.objects
-        if f.filter(username=request.POST['username']).count() >= 1:
-            context = {"messages": True,"success": "失败","data": "用户名已存在"}
-            return render(request,"user/add.html",context)
-
         ob = User()
         ob.username = request.POST['username']
         ob.nickname = request.POST['nickname']
@@ -52,11 +57,27 @@ def insert(request):
         ob.create_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.save()
-        context = {"messages": True, "success": "成功", "data": "用户：" + request.POST['username'] + "创建成功！"}
+        context = {"show_popup": True, "success": "成功", "popup_data": "用户：" + request.POST['username'] + "创建成功！"}
     except Exception as err:
         print(err)
-        context = {"messages": True, "success": "失败", "data": err}
+        context = {"show_popup": True, "success": "失败", "popup_data": err}
+
     return render(request, "user/add.html", context)
+
+def delete(request, uid=0):
+    """执行信息删除"""
+    try:
+        ob = User.objects.get(id=uid)
+        ob.delete()
+     #   ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+     #   ob.save()
+        context = {"show_popup": True, "success": "成功", "popup_data": "用户：" + str(ob) + "删除成功！"}
+    except Exception as err:
+        print(err)
+        context = {'show_popup': True, "success": "失败", "popup_data": err}
+#    return render(request,"user/index.html",context)
+    return redirect(request.META.get('HTTP_REFERER'), context)
+
 def edit(request):
     # 用户新增界面加载
     return render(request, "user/edit.html", {"data":"欢迎进入Tool，后台管理系统"})
