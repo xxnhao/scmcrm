@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from datetime import datetime
 from ..models import Customer
 from django.http import HttpResponse
+from django.db.models import Q
 # Create your views here.
 
 # 用户管理界面
@@ -10,6 +11,14 @@ def index(request, pIndex=1):
     # 用户列表页
     ob = Customer.objects
     oblist = ob.all()
+    where = []
+
+    key = request.GET.get("keyword",None)
+    if key:
+        oblist = oblist.filter(Q(cs_name__contains=key))
+        where.append('keyword=' + key)
+        print(where)
+
     pIndex = int(pIndex)
     page = Paginator(oblist,10)
     maxpages = page.num_pages
@@ -44,7 +53,44 @@ def insert(request):
 
         return HttpResponse("失败：" + str(err))
 
+def delete(request,uid=0):
+    """执行信息删除"""
+    try:
+        ob = Customer.objects.get(id=uid)
+        ob.delete()
+        #   ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        #   ob.save()
+        context = {"show_popup": True,"success": "成功","popup_data": "用户：" + str(ob) + "删除成功！"}
+    except Exception as err:
+        print(err)
+        context = {'show_popup': True,"success": "失败","popup_data": err}
+    #    return render(request,"user/index.html",context)
+    return redirect(request.META.get('HTTP_REFERER'),context)
+def edit(request,uid=0):
+    '''加载信息编辑表单'''
+    try:
+        ob = Customer.objects.get(id=uid)
+        context = {'Customer': ob}
+        return render(request,"Customer/edit.html",context)
+    except Exception as err:
+        print(err)
+        context = {'show_popup': True,"success": "失败","popup_data": err}
 
-def edit(request):
-    # 用户新增界面加载
-    return render(request, "Customer/edit.html", {"data":"欢迎进入Tool，后台管理系统"})
+    return render(request,"Customer/index.html",context)
+def update(request,uid):
+    '''执行信息编辑'''
+    try:
+        ob = Customer.objects.get(id=uid)
+        ob.cs_name = request.POST['cs_name']
+        ob.cs_url = request.POST['cs_url']
+        ob.cs_username = request.POST['cs_username']
+        ob.cs_password = request.POST['cs_password']
+        ob.status = request.POST['status']  # 1：正常  2：流失
+        ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ob.save()
+
+        return HttpResponse("客户：" + str(ob.nickname) + " 更新成功" )
+
+    except Exception as err:
+
+        return HttpResponse("失败：" + str(err))

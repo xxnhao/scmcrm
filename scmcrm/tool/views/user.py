@@ -97,7 +97,7 @@ def edit(request,uid=0):
     return render(request,"user/index.html",context)
 
 
-def updata(request,uid):
+def update(request,uid):
     '''执行信息编辑'''
     try:
         ob = User.objects.get(id=uid)
