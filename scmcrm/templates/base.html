@@ -244,6 +244,7 @@
 <!-- ./wrapper -->
 
 <!-- edu-model提示框模板 -->
+
 <div id="edu-alert" class="modal"  >
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -261,6 +262,7 @@
     </div>
   </div>
 </div>
+
 <!-- edu-model-end -->
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -292,12 +294,27 @@
     }
 
     /**
-     * 信息框，show_popup 为 True，弹出
+     * 为了实现弹窗提醒，使用ajax提交from请求
      */
-    {% if show_popup %}
-    Modal.alert({msg: "{{ popup_data }}",title: ' {{ success }}',btnok: '确定',btncl:'取消'}).on( function (e){
-    })
-{% endif %}
+   $(document).ready(function() {
+       $('form').submit(function(event) {
+            event.preventDefault(); // 阻止表单默认提交
+            // 提交表单数据
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    // 根据返回内容弹窗提示
+                    Modal.alert({msg: response ,title: ' 信息提示', btnok: '确定', btncl:'取消'});
+                },
+                error: function(xhr, status, error) {
+
+                console.log(xhr.responseText);
+                }
+            });
+       });
+    });
 </script>
 </body>
 </html>

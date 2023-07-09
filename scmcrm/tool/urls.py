@@ -10,7 +10,8 @@ urlpatterns = (
     path('user/add', user.add, name='useradd'),   # 加载添加用户页面
     path('user/insert', user.insert, name='userinsert'),  # 加载添加用户页面
     path('user/delete/<int:uid>', user.delete, name='userdelete'),  # 删除用户
-    path('user/edit', user.edit, name='useredit'),
+    path('user/edit/<int:uid>', user.edit, name='useredit'),  # 编辑用户
+    path('user/updata/<int:uid>', user.updata, name='userupdata'),  # 编辑用户
 
     # 客户管理路由
     path('Customer/<int:pIndex>', Customer.index, name='Customerindex'),  # 客户首页
