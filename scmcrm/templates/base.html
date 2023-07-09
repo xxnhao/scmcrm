@@ -205,7 +205,7 @@
         <!-- 导航列表，你可以自行更改图标 -->
         <li class="active"><a href="{% url 'index' %}"><i class="fa fa-home"></i> <span>首页</span></a></li>
 
-        <li><a href="{% url 'userindex' 1 %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+        <li><a href="{% url 'user_index' 1 %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-sitemap"></i> <span>客户管理</span>
             <span class="pull-right-container">
@@ -213,10 +213,22 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{% url 'Customerindex' 1 %}"> <i class="fa fa-circle-o"></i> 客户信息维护</a></li>
-            <li><a href="#"> <i class="fa fa-circle-o"></i> 客户续费查询</a></li>
+            <li><a href="{% url 'Customer_index' 1 %}"> <i class="fa fa-circle-o"></i> 客户信息维护</a></li>
+            <li><a href="#"> <i class="fa fa-circle-o"></i> 客户门店查询</a></li>
           </ul>
         </li>
+          <li class="treeview">
+          <a href="#"><i class="fa fa-sitemap"></i> <span>功能特性</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#"> <i class="fa fa-circle-o"></i>功能特性维护</a></li>
+            <li><a href="#"> <i class="fa fa-circle-o"></i>功能特性应用客户</a></li>
+          </ul>
+        </li>
+          <li><a href="#"><i class="fa fa-cog"></i> <span>系统设置</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -237,7 +249,7 @@
       <!--餐饮管理平台-->
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2020 <a href="#">北京博君优选网络科技有限公司</a>.</strong> 版权所有
+    <strong>Copyright &copy; 2023 <a href="#">北京博君优选网络科技有限公司</a>.</strong> 版权所有
   </footer>
 
   <!-- 添加侧栏的背景。必须放置此处紧接在控制侧边栏之后 -->
@@ -282,6 +294,7 @@
 
 <!-- 此处可以添加SimLoopl和FastClick插件，用于增强用户体验。 -->
 <script type="text/javascript">
+
 
     $(function (){
 
