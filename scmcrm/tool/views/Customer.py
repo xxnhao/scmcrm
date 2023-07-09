@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from datetime import datetime
-from ..models import Customer
+from ..models import Customer, User
 from django.http import HttpResponse
 from django.db.models import Q
 # Create your views here.
@@ -15,9 +15,8 @@ def index(request, pIndex=1):
 
     key = request.GET.get("keyword",None)
     if key:
-        oblist = oblist.filter(Q(cs_name__contains=key))
+        oblist = oblist.filter(Q(cs_name__contains=key)|Q(cs_am__contains=key))
         where.append('keyword=' + key)
-        print(where)
 
     pIndex = int(pIndex)
     page = Paginator(oblist,10)
@@ -28,11 +27,16 @@ def index(request, pIndex=1):
         pIndex = 1
     list2 = page.page(pIndex)  # 获取当前页数据
     plist = page.page_range  # 获取页码列表信息
-    context = {"Customerlist": list2, 'plist': plist,'pIndex': pIndex,'maxpages': maxpages,}
+    context = {"Customerlist": list2, 'plist': plist,'pIndex': pIndex,'maxpages': maxpages, }
     return render(request,"Customer/index.html",context)
 def add(request):
     # 用户新增界面加载
-    return render(request, "Customer/add.html" )
+
+    # 取用户表数据
+    uob = User.objects
+    uoblist = uob.all()
+    context = {"uoblist": uoblist}
+    return render(request, "Customer/add.html", context)
 
 def insert(request):
     # 用户新增界面执行数据库操作
@@ -42,6 +46,7 @@ def insert(request):
         ob.cs_url = request.POST['cs_url']
         ob.cs_username = request.POST['cs_username']
         ob.cs_password = request.POST['cs_password']
+        ob.cs_am = request.POST['cs_am']
         ob.cs_status = 1
         ob.create_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -85,11 +90,11 @@ def update(request,uid):
         ob.cs_url = request.POST['cs_url']
         ob.cs_username = request.POST['cs_username']
         ob.cs_password = request.POST['cs_password']
-        ob.status = request.POST['status']  # 1：正常  2：流失
+        ob.cs_status = request.POST['status']  # 1：正常  2：流失
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.save()
 
-        return HttpResponse("客户：" + str(ob.nickname) + " 更新成功" )
+        return HttpResponse("客户：" + str(ob.cs_name) + " 更新成功" )
 
     except Exception as err:
 

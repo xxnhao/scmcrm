@@ -25,7 +25,7 @@
                 <div class="box-tools">
                     <form action="{% url 'Customerindex' 1 %}" method="get">
                         <div class="input-group input-group-sm" style="width:150px;">
-                          <input type="text" name="keyword" class="form-control pull-right" placeholder="账号/客户名">
+                          <input type="text" name="keyword" class="form-control pull-right" placeholder="负责人/客户名">
         
                           <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -44,6 +44,7 @@
                     <th>当前状态</th>
                     <th>登录账号</th>
                     <th>登录密码</th>
+                    <th>负责人</th>
                     <th>添加时间</th>
                     <th>修改时间</th>
                     <th>操作</th>
@@ -52,7 +53,7 @@
                     <tr>
                     <td>{{ vo.id }}</td>
                     <td>{{ vo.cs_name }}</td>
-                    <td>{{ vo.cs_url }}</td>
+                    <td><a href="{{ vo.cs_url }}" target="_blank">{{ vo.cs_url }}</a></td>
                     <td>
                         {% if vo.cs_status == 1 %}
                             <span style="color:green">正常</span>
@@ -68,6 +69,7 @@
                     </td>
                     <td>{{ vo.cs_username }}</td>
                     <td>{{ vo.cs_password }}</td>
+                    <td>{{ vo.cs_am }}</td>
                     <td>{{ vo.create_at|date:'Y-m-d H:i:s' }}</td>
                     <td>{{ vo.update_at|date:'Y-m-d H:i:s' }}</td>
                     <td>
