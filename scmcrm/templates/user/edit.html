@@ -24,7 +24,7 @@
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form class="form-horizontal" action="{% url 'userupdata' user.id %}" method="post">
+          <form id="myform" class="form-horizontal" action="{% url 'userupdata' user.id %}" method="post">
             {% csrf_token %}
             <div class="box-body">
               <div class="form-group">
@@ -80,7 +80,7 @@
             <div class="box-footer">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">提交</button> &nbsp; 
-                <button type="submit" class="btn btn-default">重置</button>
+                <a href="{% url 'userindex' 1 %} " class="btn btn-primary">返回</a>
               <div class="col-sm-offset-2 col-sm-10">
             </div>
             <!-- /.box-footer -->

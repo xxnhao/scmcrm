@@ -24,7 +24,7 @@
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form class="form-horizontal" action="{% url 'myadmin_user_update' user.id %}" method="post">
+          <form id="myform" class="form-horizontal" action="{% url 'myadmin_user_update' user.id %}" method="post">
             {% csrf_token %}
             <div class="box-body">
               <div class="form-group">

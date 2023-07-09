@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from datetime import datetime
 from ..models import Customer
+from django.http import HttpResponse
 # Create your views here.
 
 # 用户管理界面
@@ -36,12 +37,13 @@ def insert(request):
         ob.create_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.save()
-        context = {"show_popup": True, "success": "成功", "popup_data": "用户：" + request.POST['cs_username'] + "创建成功！"}
-    except Exception as err:
-        print(err)
-        context = {"show_popup": True, "success": "失败", "popup_data": err}
 
-    return render(request, "Customer/add.html", context)
+        return HttpResponse("客户：" + str(ob.cs_username) + " 添加成功！")
+
+    except Exception as err:
+
+        return HttpResponse("失败：" + str(err))
+
 
 def edit(request):
     # 用户新增界面加载

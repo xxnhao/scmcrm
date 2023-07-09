@@ -25,7 +25,7 @@
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form class="form-horizontal" action="{% url 'userinsert' %}" method="post">
+          <form id="myform" class="form-horizontal" action="{% url 'userinsert' %}" method="post">
             {% csrf_token %}
             <div class="box-body">
               <div class="form-group">
