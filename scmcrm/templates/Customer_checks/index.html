@@ -18,82 +18,84 @@
     
         <div class="row">
             <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                <h3 class="box-title">客户门店列表</h3>
-    
-                <div class="box-tools">
-                    <form action="{% url 'Customer_index' 1 %}" method="get">
-                        <div class="input-group input-group-sm" style="width:150px;">
-                          <input type="text" name="keyword" class="form-control pull-right" placeholder="负责人/客户名">
-        
-                          <div class="input-group-btn">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                          </div>
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">客户门店列表</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <form action="{% url 'Customer_checks_index' 1 %}" method="get">
+                                        <div class="input-group input-group-sm" style="width:150px;">
+                                          <input type="text" name="keyword" class="form-control pull-right" placeholder="按照客户名称搜索">
+                                          <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                          </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <form action="{% url 'Customer_checks_index' 1 %}" method="get">
+                                        <div class="input-group input-group-sm" style="width:150px;">
+                                          <input type="text" name="keyword" class="form-control pull-right" placeholder="按照负责人搜索">
+                                          <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                          </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div>
-                </div>
+                    </div>
                 <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
+                    <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tr>
                     <th>ID</th>
                     <th>客户名称</th>
-                    <th>客户url</th>
-                    <th>当前状态</th>
-                    <th>登录账号</th>
-                    <th>登录密码</th>
-                    <th>负责人</th>
-                    <th>添加时间</th>
-                    <th>修改时间</th>
+                    <th>客户负责人</th>
+                    <th>有效门店数</th>
+                    <th>配送中心数</th>
+                    <th>直营门店数</th>
+                    <th>加盟门店数</th>
+                    <th>外销门店数</th>
+                    <th>本月到期数</th>
+                    <th>下月到期数</th>
+                    <th>数据更新时间</th>
                     <th>操作</th>
                     </tr>
                     {% for vo in Customerlist %}
                     <tr>
                     <td>{{ vo.id }}</td>
                     <td>{{ vo.cs_name }}</td>
-                    <td><a href="{{ vo.cs_url }}" target="_blank">{{ vo.cs_url }}</a></td>
-                    <td>
-                        {% if vo.cs_status == 1 %}
-                            <span style="color:green">正常</span>
-                        {% elif vo.cs_status == 2 %}
-                            <span style="color:red">流失</span>
-                        {% elif vo.cs_status == 6 %}
-                            <span style="color:blue">管理员</span>
-                        {% elif vo.cs_status == 9 %}
-                            <span style="color:red">已删除</span>
-                        {% else %}
-                            <span style="color:red">未知状态</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ vo.cs_username }}</td>
-                    <td>{{ vo.cs_password }}</td>
                     <td>{{ vo.cs_am }}</td>
-                    <td>{{ vo.create_at|date:'Y-m-d H:i:s' }}</td>
-                    <td>{{ vo.update_at|date:'Y-m-d H:i:s' }}</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>12</td>
                     <td>
-                        <a type="button" href="{% url 'Customer_edit' vo.id %}" class="btn btn-success btn-xs">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑</a>
-                        <button type="button" onclick="del('{% url 'Customer_delete' vo.id %}')" class="btn btn-danger btn-xs">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除</button>
+                        <a type="button" href="{% url 'Customer_checks_index' vo.id %}" class="btn btn-success btn-xs">
+                        <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
+                        <a type="button" href="{% url 'Customer_checks_StoreDataUpdate' vo.id %}" class="btn btn-danger btn-xs">
+                        <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</a>
                     </td>
                     </tr>
                     {% endfor %}
                 </table>
             </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a role="button" href="{% url 'Customer_add' %}" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加客户</a>
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="{% url 'Customer_index' pIndex|add:-1 %}?{{key|join:'&'}}">上一页</a></li>
-                        {% for p in plist %}
-                        <li {% if p == pIndex %}class="active"{% endif %}><a href="{% url 'Customer_index' p %}?{{key|join:'&'}}">{{p}}</a></li>
-                        {% endfor %}
-                        <li><a href="{% url 'Customer_index' pIndex|add:1 %}?{{key|join:'&'}}">下一页</a></li>
-                    </ul>
-                </div>
+                    <div class="box-footer clearfix">
+                        <a role="button" href="#" class="btn btn-primary">
+                                <span class="fa fa-refresh" aria-hidden="true"></span>整体更新</a>
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                            <li><a href="#">上一页</a></li>
+                            <li class="active"><a href="#"></a></li>
+                            <li><a href="#">下一页</a></li>
+                        </ul>
+                    </div>
             </div>
             <!-- /.box -->
         </div>

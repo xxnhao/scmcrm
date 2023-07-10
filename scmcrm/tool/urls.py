@@ -23,4 +23,5 @@ urlpatterns = (
 
     # 客户门店查询路由
     path('Customer_checks/<int:pIndex>',Customer_checks.index,name='Customer_checks_index'),  # 客户首页
+    path('Customer_update_shop/<int:cs_id>',Customer_checks.StoreDataUpdate,name='Customer_checks_StoreDataUpdate'),  # 客户首页
 )

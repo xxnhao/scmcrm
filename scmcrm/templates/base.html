@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>订餐系统后台管理</title>
+  <title>SCM客户服务系统</title>
   <!-- 支持响应式布局 -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="{% static 'myadmin/bower_components/bootstrap/dist/css/bootstrap.min.css'%}">
@@ -206,26 +206,16 @@
         <li class="active"><a href="{% url 'index' %}"><i class="fa fa-home"></i> <span>首页</span></a></li>
 
         <li><a href="{% url 'user_index' 1 %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+        <li><a href="{% url 'Customer_index' 1 %}"><i class="fa fa-sitemap"></i> <span>客户管理</span></a></li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-sitemap"></i> <span>客户管理</span>
+          <a href="#"><i class="fa fa-bar-chart"></i> <span>客户数据查询</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{% url 'Customer_index' 1 %}"> <i class="fa fa-circle-o"></i> 客户信息维护</a></li>
-            <li><a href="#"> <i class="fa fa-circle-o"></i> 客户门店查询</a></li>
-          </ul>
-        </li>
-          <li class="treeview">
-          <a href="#"><i class="fa fa-sitemap"></i> <span>功能特性</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#"> <i class="fa fa-circle-o"></i>功能特性维护</a></li>
-            <li><a href="#"> <i class="fa fa-circle-o"></i>功能特性应用客户</a></li>
+            <li><a href="{% url 'Customer_checks_index' 1 %}"> <i class="fa fa-circle-o"></i> 客户门店续费查询</a></li>
+            <li><a href="#"> <i class="fa fa-circle-o"></i>客户功能特性使用查询</a></li>
           </ul>
         </li>
           <li><a href="#"><i class="fa fa-cog"></i> <span>系统设置</span></a></li>

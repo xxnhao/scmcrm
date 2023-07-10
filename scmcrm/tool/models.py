@@ -23,7 +23,6 @@ class Customer(models.Model):
     cs_password = models.CharField(max_length=50)  # 客户密码
     cs_am = models.CharField(max_length=50,default="")  # 服务人员
     cs_status = models.IntegerField(default=1)  # 状态:1正常/2流失/
-    create_at = models.DateTimeField(default=datetime.now)  # 创建时间
     update_at = models.DateTimeField(default=datetime.now)  # 修改时间
 
     def toDict(self):
@@ -33,3 +32,16 @@ class Customer(models.Model):
                 'update_at': self.update_at.strftime('%Y-%m-%d %H:%M:%S')}
     class Meta:
         db_table = "Customer"   # 更改表名
+
+class CustomerReport(models.Model):
+    cs_id = models.CharField(max_length=50)  # 客户id
+    cs_am = models.CharField(max_length=100)  # 客户负责人
+    store_id = models.CharField(max_length=100)  # 门店ID
+    store_name = models.CharField(max_length=50)  # 门店名称
+    store_type = models.CharField(max_length=50,)  # 门店类型
+    store_ex_time = models.DateField()  # 到期时间
+    update_at = models.DateTimeField(default=datetime.now)  # 更新时间
+    def toDict(self):
+        return {}
+    class Meta:
+        db_table = "CustomerReport"  # 更改表名
