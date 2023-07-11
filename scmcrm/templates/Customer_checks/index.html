@@ -60,22 +60,20 @@
                     <th>外销门店数</th>
                     <th>本月到期数</th>
                     <th>下月到期数</th>
-                    <th>数据更新时间</th>
                     <th>操作</th>
                     </tr>
-                    {% for vo in Customerlist %}
+                    {% for vo in CustomerReport_list %}
                     <tr>
                     <td>{{ vo.id }}</td>
                     <td>{{ vo.cs_name }}</td>
                     <td>{{ vo.cs_am }}</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
-                    <td>12</td>
+                    <td>{{ vo.cs_count }}</td>
+                    <td>{{ vo.ps_count}}</td>
+                    <td>{{ vo.zy_count }}</td>
+                    <td>{{ vo.jm_count }}</td>
+                    <td>{{ vo.wx_count }}</td>
+                    <td>{{ vo.bydq_count }}</td>
+                    <td>{{ vo.xydq_count }}</td>
                     <td>
                         <a type="button" href="{% url 'Customer_checks_index' vo.id %}" class="btn btn-success btn-xs">
                         <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
