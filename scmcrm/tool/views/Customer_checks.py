@@ -1,7 +1,6 @@
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
 from datetime import date, timedelta
-from django.db.models.functions import ExtractYear, ExtractMonth
 from ..models import Customer, CustomerReport
 from django.http import HttpResponse
 from django.db.models import Q
@@ -23,7 +22,6 @@ def index(request,pIndex=1):
         where.append('keyword=' + key)
 
     # 汇总数据
-
     cs_store_list = []
 
     # 判断本月数据bydq_count
@@ -55,10 +53,7 @@ def index(request,pIndex=1):
             'bydq_count': bydq_count,
             'xydq_count': xydq_count
         }
-
         cs_store_list.append(data)
-
-        print(cs_store_list)
 
     pIndex = int(pIndex)
     page = Paginator(cs_store_list, 10)
@@ -109,6 +104,9 @@ def StoreDataUpdate(request, cs_id=0):
         rdb.store_ex_time = vo['renewaltime']  # 到期时间
         if vo['renewaltime'] == '0000-00-00':
             rdb.store_ex_time = '2099-12-1'
+        elif vo['renewaltime'] == None:
+            rdb.store_ex_time = '2099-12-1'
+
         rdb.save()
 
     return HttpResponse(r)
@@ -138,7 +136,7 @@ def GetStoreData(url, username, pwd):
     if pwd == "gyljcgtdcpb@acewill.cn":
         pwd = "2142baf3b6e652c61ac34a9e29d19999"
 
-    # 组装请求参数
+    # 组装请求参数：用户名，密码，加密后的密码
     data = {
         'name': username,
         'pwd': '',

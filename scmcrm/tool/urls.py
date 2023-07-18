@@ -1,6 +1,6 @@
 # 程序后台子路由
 from django.urls import path
-from .views import index, user, Customer,Customer_checks
+from .views import index, user, Customer, Customer_checks, customer_store_detail, export_excel
 
 urlpatterns = (
     path("", index.index, name='index'),
@@ -22,6 +22,11 @@ urlpatterns = (
     path('Customer/update/<int:uid>', Customer.update, name='Customer_update'),  # 修改客户页面
 
     # 客户门店查询路由
-    path('Customer_checks/<int:pIndex>',Customer_checks.index,name='Customer_checks_index'),  # 客户首页
-    path('Customer_update_shop/<int:cs_id>',Customer_checks.StoreDataUpdate,name='Customer_checks_StoreDataUpdate'),  # 客户首页
+    path('Customer_checks/<int:pIndex>',Customer_checks.index, name='Customer_checks_index'),  # 客户首页
+    path('Customer_update_shop/<int:cs_id>',Customer_checks.StoreDataUpdate, name='Customer_checks_StoreDataUpdate'),  # 获取到期门店接口
+    path('customer_store_detail/<int:cs_id>/<int:pIndex>',customer_store_detail.index, name='customer_store_detail'),  # 获取单个客户门店信息
+
+    # 导出excel表格
+    path('export_excel/', export_excel.export_excel, name='export_excel'),  # 导出表格处理
+    
 )

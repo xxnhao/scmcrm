@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block main_body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            客户门店管理
+            <small>客户门店列表</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i>SCM客户服务系统</a></li>
+            <li class="active">{{ cs_name }}</li>
+        </ol>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="">
+                            <form action="{% url 'Customer_checks_index' 1 %}" method="get">
+                                <div class="col-xs-3" style="width: 230px">
+                                    <label class="control-label">门店类型:</label>
+                                    <select class="form-control select2 input-sm" style="width: 120px">
+                                        <option selected="selected">全部类型</option>
+                                        <option>直营店</option>
+                                        <option>加盟店</option>
+                                        <option>外销客户</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-3" style="width: 240px">
+                                    <label class="control-label">到期天数:</label>
+                                    <input type="number" class="select2-selection select2-selection--single" style="width: 50px" value="30">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                        <table id="my-table" class="table table-hover">
+                            <tr>
+                                <th>客户名称</th>
+                                <th>客户负责人</th>
+                                <th>供应链门店ID</th>
+                                <th>供应链门店名称</th>
+                                <th>门店类型</th>
+                                <th>到期时间</th>
+                                <th>操作</th>
+                            </tr>
+                            {% for vo in customer_store_detail %}
+                                <tr>
+                                    <td>{{ cs_name }}</td>
+                                    <td>{{ vo.cs_am }}</td>
+                                    <td>{{ vo.store_id }}</td>
+                                    <td>{{ vo.store_name }}</td>
+                                    <!--# 3=配送中心，4=直营店，5=加盟店，6=外销客户 -->
+                                    <td>
+                                        {% if vo.store_type == '3' %}
+                                            配送中心
+                                        {% elif vo.store_type == '4' %}
+                                            直营店
+                                        {% elif vo.store_type == '5' %}
+                                            加盟店
+                                        {% elif vo.store_type == '6' %}
+                                            外销客户
+                                        {% else %}
+                                            其他门店
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ vo.store_ex_time|date:'Y-m-d' }}</td>
+                                    <td>
+                                        <a type="button" href="{% url 'Customer_checks_index'  vo.id %}"
+                                           class="btn btn-success btn-xs">
+                                            <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
+                                        <a type="button" href="{% url 'Customer_checks_StoreDataUpdate'  vo.id %}"
+                                           class="btn btn-danger btn-xs">
+                                            <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <a role="button" href="{% url 'Customer_checks_index' 1 %}" class="btn btn-danger">
+                            <span class="fa fa-refresh" aria-hidden="true"></span> 返回客户列表</a>
+                        <button id="export-btn" role="button" href="{% url 'Customer_add' %}" class="btn btn-primary">
+                            <span class="fa fa-file-excel-o" aria-hidden="true"></span> 导出Excel
+                        </button>
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                            <li>
+                                <a href="{% url 'customer_store_detail' cs_id pIndex|add:-1 %}?{{ key|join:'&' }}">上一页</a>
+                            </li>
+                            {% for p in plist %}
+                                <li {% if p == pIndex %}class="active"{% endif %}><a
+                                        href="{% url 'customer_store_detail' cs_id p %}?{{ key|join:'&' }}">{{ p }}</a>
+                                </li>
+                            {% endfor %}
+                            <li>
+                                <a href="{% url 'customer_store_detail' cs_id pIndex|add:1 %}?{{ key|join:'&' }}">下一页</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+{% endblock %}

@@ -13,39 +13,28 @@
         </ol>
         </section>
     
+
         <!-- Main content -->
         <section class="content container-fluid">
-    
+
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">客户门店列表</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                    <form action="{% url 'Customer_checks_index' 1 %}" method="get">
-                                        <div class="input-group input-group-sm" style="width:150px;">
-                                          <input type="text" name="keyword" class="form-control pull-right" placeholder="按照客户名称搜索">
-                                          <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                          </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-12">
-                                    <form action="{% url 'Customer_checks_index' 1 %}" method="get">
-                                        <div class="input-group input-group-sm" style="width:150px;">
-                                          <input type="text" name="keyword" class="form-control pull-right" placeholder="按照负责人搜索">
-                                          <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                          </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+            <div class="box">
+                <div class="box-header">
+                <h3 class="box-title">客户门店列表</h3>
+
+                <div class="box-tools">
+                    <form action="{% url 'Customer_checks_index' 1 %}" method="get">
+                        <div class="input-group input-group-sm" style="width:150px;">
+                          <input type="text" name="keyword" class="form-control pull-right" placeholder="负责人/客户名">
+
+                          <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                          </div>
                         </div>
-                    </div>
+                    </form>
+                </div>
+                </div>
                 <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
@@ -75,7 +64,7 @@
                     <td>{{ vo.bydq_count }}</td>
                     <td>{{ vo.xydq_count }}</td>
                     <td>
-                        <a type="button" href="{% url 'Customer_checks_index' vo.id %}" class="btn btn-success btn-xs">
+                        <a type="button" href="{% url 'customer_store_detail' vo.id 1 %}" class="btn btn-success btn-xs">
                         <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
                         <a type="button" href="{% url 'Customer_checks_StoreDataUpdate' vo.id %}" class="btn btn-danger btn-xs">
                         <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</a>
@@ -85,17 +74,21 @@
                 </table>
             </div>
                 <!-- /.box-body -->
-                    <div class="box-footer clearfix">
-                        <a role="button" href="#" class="btn btn-primary">
-                                <span class="fa fa-refresh" aria-hidden="true"></span>整体更新</a>
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <li><a href="#">上一页</a></li>
-                            <li class="active"><a href="#"></a></li>
-                            <li><a href="#">下一页</a></li>
-                        </ul>
-                    </div>
+                <div class="box-footer clearfix">
+                    <a role="button" href="{% url 'Customer_add' %}" class="btn btn-danger">
+                            <span class="fa fa-refresh" aria-hidden="true"></span> 一键同步</a>
+                    <a role="button" href="{% url 'Customer_add' %}" class="btn btn-primary">
+                            <span class="fa fa-file-excel-o" aria-hidden="true"></span> 导出Excel</a>
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="{% url 'Customer_checks_index' pIndex|add:-1 %}?{{key|join:'&'}}">上一页</a></li>
+                        {% for p in plist %}
+                        <li {% if p == pIndex %}class="active"{% endif %}><a href="{% url 'Customer_checks_index' p %}?{{key|join:'&'}}">{{p}}</a></li>
+                        {% endfor %}
+                        <li><a href="{% url 'Customer_checks_index' pIndex|add:1 %}?{{key|join:'&'}}">下一页</a></li>
+                    </ul>
+                </div>
+                 <!-- /.box -->
             </div>
-            <!-- /.box -->
         </div>
     </div>
     
