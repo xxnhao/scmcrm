@@ -67,15 +67,11 @@ def index(request,pIndex=1):
     context = {"CustomerReport_list": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages,}
     return render(request,"Customer_checks/index.html",context)
 
-
-def StoreDataUpdate(request, cs_id=0):
-
-    print(cs_id)
-
+# 获取单个门店信息
+def StoreDataUpdate(cs_id=0):
     try:
-        csdb = Customer.objects.get(id=cs_id)
-
         # 获取数据库中客户的url和账号密码
+        csdb = Customer.objects.get(id=cs_id)
         url = csdb.cs_url
         username = csdb.cs_username
         pwd = csdb.cs_password
@@ -91,9 +87,6 @@ def StoreDataUpdate(request, cs_id=0):
 
     # 获取门店数据
     r = GetStoreData(url, username, pwd)
-
-    print(r['total'])
-
     for vo in r['data']:
         rdb = CustomerReport()
         rdb.cs_id = cs_id
@@ -111,11 +104,12 @@ def StoreDataUpdate(request, cs_id=0):
 
     return HttpResponse(r)
 
-
+# 获取门店信息接口
 def GetStoreData(url, username, pwd):
 
     import requests
     import hashlib
+
     # 设置请求头
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -128,51 +122,48 @@ def GetStoreData(url, username, pwd):
     # 密码需要MD5加密
     md5 = hashlib.md5()
     md5.update(pwd.encode('utf-8'))
-    pwd = md5.hexdigest()
+    hide_pw = md5.hexdigest()
 
     # 有一些固定密码
     if pwd == "acewill@321":
-        pwd = 'fe9bd43565f5d435da0539793d93c0e9'
+        hide_pw = 'fe9bd43565f5d435da0539793d93c0e9'
     if pwd == "gyljcgtdcpb@acewill.cn":
-        pwd = "2142baf3b6e652c61ac34a9e29d19999"
+        hide_pw = "2142baf3b6e652c61ac34a9e29d19999"
 
     # 组装请求参数：用户名，密码，加密后的密码
     data = {
         'name': username,
-        'pwd': '',
-        'hide_pw': pwd
+        'pwd': pwd,
+        'hide_pw': hide_pw
     }
 
     # 请求网址，并获取cookie 登录后的cookie
     response = requests.post(url_login, headers=headers, data=data)
-    cookie = response.cookies.get('PHPSESSID')
-    print("这是登录后的cookie：", cookie)
+    cookie = response.cookies
+    print("这是登录后的cookie：", cookie.get)
+    print("登录后的返回：：",response.text)
 
-    # 继续请求，登录一个门店
+    # 继续请求，进入一个门店
     url_get_store = url + "logistics/?do=selectstore"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'PHPSESSID': cookie
-    }
-
     data = {
         'lsid': "2",
     }
-    response = requests.get(url_get_store, headers=headers, data=data)
-    cookie = response.cookies.get('PHPSESSID')
+    response = requests.post(url_get_store, cookies=cookie, headers=headers, data=data)
+    print("这是进入门店后的cookie：", response.cookies.get)
+    print("进入门店后返回：", response.text)
 
-    print("这是进入门店后的cookie：",cookie)
+    # 进入门店查询功能，老版本需要
+    url_get_tablename = url + "chainsales/head/shop?tablename=sys_user_func"
+    requests.get(url_get_tablename, cookies=cookie, headers=headers, data=data)
+    print("这是进入门店后的cookie：", cookie.get)
+    print("进入门店查询后的返回：", response.text)
 
+    # 获取门店数据
     url_get_storelist = url + "chainsales/head/shop/listshop?limit=1000"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'PHPSESSID': cookie
-    }
-
-    response = requests.get(url_get_storelist,headers=headers, data=data)
-
+    response = requests.get(url_get_storelist, cookies=cookie, headers=headers, data=data)
     print("这是获取到的门店列表：", response.json())
 
     return response.json()
+
+
+#  批量获取门店信息
