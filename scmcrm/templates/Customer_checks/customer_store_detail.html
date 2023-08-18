@@ -42,7 +42,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
-                        <table id="my-table" class="table table-hover">
+                        <table id="data-table" class="table table-hover">
                             <tr>
                                 <th>客户名称</th>
                                 <th>客户负责人</th>
@@ -50,7 +50,6 @@
                                 <th>供应链门店名称</th>
                                 <th>门店类型</th>
                                 <th>到期时间</th>
-                                <th>操作</th>
                             </tr>
                             {% for vo in customer_store_detail %}
                                 <tr>
@@ -73,14 +72,6 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ vo.store_ex_time|date:'Y-m-d' }}</td>
-                                    <td>
-                                        <a type="button" href="{% url 'Customer_checks_index'  vo.id %}"
-                                           class="btn btn-success btn-xs">
-                                            <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
-                                        <a type="button" href="{% url 'Customer_checks_StoreDataUpdate'  vo.id %}"
-                                           class="btn btn-danger btn-xs">
-                                            <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</a>
-                                    </td>
                                 </tr>
                             {% endfor %}
                         </table>

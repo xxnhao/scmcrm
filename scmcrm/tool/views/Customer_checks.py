@@ -67,42 +67,89 @@ def index(request,pIndex=1):
     context = {"CustomerReport_list": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages,}
     return render(request,"Customer_checks/index.html",context)
 
-# 获取单个门店信息
-def StoreDataUpdate(cs_id=0):
-    try:
-        # 获取数据库中客户的url和账号密码
-        csdb = Customer.objects.get(id=cs_id)
-        url = csdb.cs_url
-        username = csdb.cs_username
-        pwd = csdb.cs_password
-        cs_am = csdb.cs_am
 
-    except Exception as err:
+def StoreDataUpdate(request,cs_id=0):
+    # 如果=0为获取全部客户门店数据，非0获取单个客户门店数据
+    if cs_id != 0:
+        try:
+            # 获取数据库中客户的url和账号密码
+            csdb = Customer.objects.get(id=cs_id)
+            url = csdb.cs_url
+            username = csdb.cs_username
+            pwd = csdb.cs_password
+            cs_am = csdb.cs_am
 
-        print(err)
+        except Exception as err:
 
-    # 更新先清空门店客户信息
-    rdb = CustomerReport.objects.filter(cs_id=cs_id)
-    rdb.delete()
+            print(err)
 
-    # 获取门店数据
-    r = GetStoreData(url, username, pwd)
-    for vo in r['data']:
-        rdb = CustomerReport()
-        rdb.cs_id = cs_id
-        rdb.cs_am = cs_am
-        rdb.store_id = vo['sid']
-        rdb.store_name = vo['shopname']
-        rdb.store_type = vo['stype']  # 3=配送中心，4=直营店，5=加盟店，6=外销客户
-        rdb.store_ex_time = vo['renewaltime']  # 到期时间
-        if vo['renewaltime'] == '0000-00-00':
-            rdb.store_ex_time = '2099-12-1'
-        elif vo['renewaltime'] == None:
-            rdb.store_ex_time = '2099-12-1'
+        # 更新先清空门店客户信息
+        rdb = CustomerReport.objects.filter(cs_id=cs_id)
+        rdb.delete()
 
-        rdb.save()
+        # 获取门店数据
+        r = GetStoreData(url, username, pwd)
+        for vo in r['data']:
+            rdb = CustomerReport()
+            rdb.cs_id = cs_id
+            rdb.cs_am = cs_am
+            rdb.store_id = vo['sid']
+            rdb.store_name = vo['shopname']
+            rdb.store_type = vo['stype']  # 3=配送中心，4=直营店，5=加盟店，6=外销客户
+            rdb.store_ex_time = vo['renewaltime']  # 到期时间
+            if vo['renewaltime'] == '0000-00-00':
+                rdb.store_ex_time = '2099-12-1'
+            elif vo['renewaltime'] == None:
+                rdb.store_ex_time = '2099-12-1'
 
-    return HttpResponse(r)
+            rdb.save()
+
+            data = [{
+                'success': True,
+                'msg': '操作成功！'
+            }]
+
+        return HttpResponse(data)
+    else:
+        try:
+            # 获取所有客户信息
+            csdb = Customer.objects.all()
+            for i in csdb:
+                print(i.cs_url)
+                url = i.cs_url
+                username = i.cs_username
+                pwd = i.cs_password
+                cs_am = i.cs_am
+                # 更新先清空门店客户信息
+                rdb = CustomerReport.objects.filter(cs_id=i.id)
+                rdb.delete()
+                # 获取门店数据
+                r = GetStoreData(url,username,pwd)
+                for vo in r['data']:
+                    rdb = CustomerReport()
+                    rdb.cs_id = i.id
+                    rdb.cs_am = cs_am
+                    rdb.store_id = vo['sid']
+                    rdb.store_name = vo['shopname']
+                    rdb.store_type = vo['stype']  # 3=配送中心，4=直营店，5=加盟店，6=外销客户
+                    rdb.store_ex_time = vo['renewaltime']  # 到期时间
+                    if vo['renewaltime'] == '0000-00-00':
+                        rdb.store_ex_time = '2099-12-1'
+                    elif vo['renewaltime'] == None:
+                        rdb.store_ex_time = '2099-12-1'
+
+                    rdb.save()
+            data = [{
+                'success': True,
+                'msg': '操作成功！'
+            }]
+            return HttpResponse(data)
+        except Exception as err:
+            data = [{
+                'success': False,
+                'msg': '操作失败！'
+            }]
+            return HttpResponse(data)
 
 # 获取门店信息接口
 def GetStoreData(url, username, pwd):
@@ -117,7 +164,7 @@ def GetStoreData(url, username, pwd):
     # 登录网页
     url_login = url + "?do=check"
 
-    print(url_login)
+   #print(url_login)
 
     # 密码需要MD5加密
     md5 = hashlib.md5()
@@ -141,7 +188,7 @@ def GetStoreData(url, username, pwd):
     response = requests.post(url_login, headers=headers, data=data)
     cookie = response.cookies
     print("这是登录后的cookie：", cookie.get)
-    print("登录后的返回：：",response.text)
+    #print("登录后的返回：：",response.text)
 
     # 继续请求，进入一个门店
     url_get_store = url + "logistics/?do=selectstore"
@@ -150,20 +197,17 @@ def GetStoreData(url, username, pwd):
     }
     response = requests.post(url_get_store, cookies=cookie, headers=headers, data=data)
     print("这是进入门店后的cookie：", response.cookies.get)
-    print("进入门店后返回：", response.text)
+    #print("进入门店后返回：", response.text)
 
     # 进入门店查询功能，老版本需要
     url_get_tablename = url + "chainsales/head/shop?tablename=sys_user_func"
     requests.get(url_get_tablename, cookies=cookie, headers=headers, data=data)
     print("这是进入门店后的cookie：", cookie.get)
-    print("进入门店查询后的返回：", response.text)
+    #print("进入门店查询后的返回：", response.text)
 
     # 获取门店数据
     url_get_storelist = url + "chainsales/head/shop/listshop?limit=1000"
     response = requests.get(url_get_storelist, cookies=cookie, headers=headers, data=data)
-    print("这是获取到的门店列表：", response.json())
+    #print("这是获取到的门店列表：", response.json())
 
     return response.json()
-
-
-#  批量获取门店信息

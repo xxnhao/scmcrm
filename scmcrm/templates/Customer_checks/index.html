@@ -39,7 +39,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="data-table">
                             <tr>
                                 <th>ID</th>
                                 <th>客户名称</th>
@@ -63,15 +63,17 @@
                                     <td>{{ vo.zy_count }}</td>
                                     <td>{{ vo.jm_count }}</td>
                                     <td>{{ vo.wx_count }}</td>
-                                    <td>{{ vo.bydq_count }}</td>
-                                    <td>{{ vo.xydq_count }}</td>
+                                    <td><a href="{% url 'StoreDueThisMonth' vo.id 1 %}">{{ vo.bydq_count }}</a>
+                                    </td>
+                                    <td><a href="{% url 'StoreDueNextMonth' vo.id 1 %}">{{ vo.xydq_count }}</a>
+                                    </td>
                                     <td>
                                         <a type="button" href="{% url 'customer_store_detail' vo.id 1 %}"
                                            class="btn btn-success btn-xs">
-                                            <span class="fa fa-list-ul" aria-hidden="true"></span>门店详情</a>
-                                        <a type="button" href="{% url 'Customer_checks_StoreDataUpdate' vo.id %}"
+                                            <span class="fa fa-list-ul" aria-hidden="true"></span>全部门店</a>
+                                        <button type="button" onclick=getStore("{% url 'Customer_checks_StoreDataUpdate' vo.id %}")
                                            class="btn btn-danger btn-xs">
-                                            <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</a>
+                                            <span class="fa fa-refresh" aria-hidden="true"></span> 重新同步</button>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -79,10 +81,10 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">
-                        <a role="button" href="{% url 'Customer_add' %}" class="btn btn-danger">
-                            <span class="fa fa-refresh" aria-hidden="true"></span> 一键同步</a>
-                        <a role="button" href="{% url 'Customer_add' %}" class="btn btn-primary">
-                            <span class="fa fa-file-excel-o" aria-hidden="true"></span> 导出Excel</a>
+                        <button role="button" onclick=getStore("{% url 'Customer_checks_StoreDataUpdate' 0 %}") class="btn btn-danger">
+                            <span class="fa fa-refresh" aria-hidden="true"></span> 一键同步</button>
+                        <button role="button" onclick=excledl("{% url 'export_excel' %}") class="btn btn-primary">
+                            <span class="fa fa-file-excel-o" aria-hidden="true"></span> 导出Excel</button>
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li><a href="{% url 'Customer_checks_index' pIndex|add:-1 %}?{{ key|join:'&' }}">上一页</a>
                             </li>
