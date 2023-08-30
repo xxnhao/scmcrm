@@ -8,6 +8,11 @@ from django.db.models import Q
 
 
 def index(request, cs_id, pIndex=1):
+
+    if request.method == 'GET':
+        date = request.body.decode('utf-8')
+        print(date)
+
     # 获取客户名称
     ob = Customer.objects.get(id= cs_id)
     cs_name = ob.cs_name

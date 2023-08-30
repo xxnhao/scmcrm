@@ -29,7 +29,6 @@ class Customer(models.Model):
     def toDict(self):
         return {'id': self.id,'cs_name': self.cs_name,'cs_url': self.cs_url,
                 'cs_username': self.cs_username,'cs_password': self.cs_password,'cs_status': self.cs_status, 'cs_am': self.cs_am,
-                'create_at': self.create_at.strftime('%Y-%m-%d %H:%M:%S'),
                 'update_at': self.update_at.strftime('%Y-%m-%d %H:%M:%S')}
     class Meta:
         db_table = "Customer"   # 更改表名

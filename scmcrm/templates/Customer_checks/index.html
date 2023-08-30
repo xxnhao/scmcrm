@@ -41,17 +41,9 @@
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-hover" id="data-table">
                             <tr>
-                                <th>ID</th>
-                                <th>客户名称</th>
-                                <th>客户负责人</th>
-                                <th>有效门店数</th>
-                                <th>配送中心数</th>
-                                <th>直营门店数</th>
-                                <th>加盟门店数</th>
-                                <th>外销门店数</th>
-                                <th>本月到期数</th>
-                                <th>下月到期数</th>
-                                <th>操作</th>
+                                {% for vo in title %}
+                                <th>{{ vo }}</th>
+                                {% endfor %}
                             </tr>
                             {% for vo in CustomerReport_list %}
                                 <tr>
@@ -83,7 +75,7 @@
                     <div class="box-footer clearfix">
                         <button role="button" onclick=getStore("{% url 'Customer_checks_StoreDataUpdate' 0 %}") class="btn btn-danger">
                             <span class="fa fa-refresh" aria-hidden="true"></span> 一键同步</button>
-                        <button role="button" onclick=excledl("{% url 'export_excel' %}") class="btn btn-primary">
+                        <button role="button" onclick=excledl("{% url 'Customer_checks_index' 1 %}")  class="btn btn-primary">
                             <span class="fa fa-file-excel-o" aria-hidden="true"></span> 导出Excel</button>
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li><a href="{% url 'Customer_checks_index' pIndex|add:-1 %}?{{ key|join:'&' }}">上一页</a>

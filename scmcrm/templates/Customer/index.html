@@ -40,16 +40,9 @@
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-hover" id="data-table">
                             <tr>
-                                <th>ID</th>
-                                <th>客户名称</th>
-                                <th>客户url</th>
-                                <th>当前状态</th>
-                                <th>登录账号</th>
-                                <th>登录密码</th>
-                                <th>负责人</th>
-                                <th>添加时间</th>
-                                <th>修改时间</th>
-                                <th>操作</th>
+                                {% for vo in title %}
+                                <th>{{ vo }}</th>
+                                {% endfor %}
                             </tr>
                             {% for vo in Customerlist %}
                                 <tr>
@@ -72,7 +65,6 @@
                                     <td>{{ vo.cs_username }}</td>
                                     <td>{{ vo.cs_password }}</td>
                                     <td>{{ vo.cs_am }}</td>
-                                    <td>{{ vo.create_at|date:'Y-m-d H:i:s' }}</td>
                                     <td>{{ vo.update_at|date:'Y-m-d H:i:s' }}</td>
                                     <td>
                                         <a type="button" href="{% url 'Customer_edit' vo.id %}"

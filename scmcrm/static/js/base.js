@@ -81,18 +81,6 @@ $('#myform').submit(function (event) {
 });
 
 function excledl(url) {
-    // 获取表格数据
-    var table = document.getElementById('data-table');
-    var rows = table.rows;
-    var data = [];
-    for (var i = 0; i < rows.length; i++) {
-        var rowData = [];
-        var cells = rows[i].cells;
-        for (var j = 0; j < cells.length; j++) {
-            rowData.push(cells[j].innerText);
-        }
-        data.push(rowData);
-    }
     //设置csrf证书
     const csrftoken = getCookie('csrftoken');
     $.ajaxSetup({
@@ -103,6 +91,9 @@ function excledl(url) {
         }
     });
     // 发送数据给Django
+    var data ={
+        'tpye':'DC'
+    }
     $.ajax({
         url: url,
         type: "POST",

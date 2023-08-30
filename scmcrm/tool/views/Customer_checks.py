@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect
+import json
 from django.core.paginator import Paginator
 from datetime import date, timedelta
 from ..models import Customer, CustomerReport
 from django.http import HttpResponse
 from django.db.models import Q
-
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request,pIndex=1):
+
     # 客户列表
     ob = Customer.objects
     oblist = ob.all()
@@ -31,6 +33,7 @@ def index(request,pIndex=1):
     next_month = date.today().replace(day=28) + timedelta(days=4)
     next_month = next_month.replace(day=1)
     next_year, next_month = next_month.year, next_month.month
+    title = ['客户ID','客户名称','客户负责人','有效门店数','配送中心数','直营门店数','加盟门店数','外销门店数','本月到期数','下月到期数','操作']
 
     for i in oblist:
         cs_count = cs_store.filter(cs_id=i.id).count()
@@ -64,7 +67,10 @@ def index(request,pIndex=1):
         pIndex = 1
     cs_store_list = page.page(pIndex)  # 获取当前页数据
     plist = page.page_range  # 获取页码列表信息
-    context = {"CustomerReport_list": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages,}
+
+
+
+    context = {"title": title, "CustomerReport_list": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages,}
     return render(request,"Customer_checks/index.html",context)
 
 
@@ -115,7 +121,6 @@ def StoreDataUpdate(request,cs_id=0):
             # 获取所有客户信息
             csdb = Customer.objects.all()
             for i in csdb:
-                print(i.cs_url)
                 url = i.cs_url
                 username = i.cs_username
                 pwd = i.cs_password
