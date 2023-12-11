@@ -59,7 +59,7 @@ def index(request,pIndex=1):
         cs_store_list.append(data)
 
     pIndex = int(pIndex)
-    page = Paginator(cs_store_list, 10)
+    page = Paginator(cs_store_list, 100)
     maxpages = page.num_pages
     if pIndex > maxpages:
         pIndex = maxpages

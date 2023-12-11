@@ -1,7 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from datetime import datetime
-# Create your models here.
 
 # 用户账号信息模型
 class User(models.Model):
@@ -22,7 +20,10 @@ class Customer(models.Model):
     cs_url = models.CharField(max_length=50)  # 客户url
     cs_username = models.CharField(max_length=100)  # 客户账号
     cs_password = models.CharField(max_length=50)  # 客户密码
-    cs_am = models.CharField(max_length=50,default="")  # 服务人员
+    cs_AddrName = models.CharField(max_length=50,default=None)  # 客户收件人
+    cs_Address = models.CharField(max_length=200, default=None)  # 客户地址
+    cs_AddrPhone = models.CharField(max_length=50, default=None)  # 客户联系电话
+    cs_am = models.CharField(max_length=50, default="")  # 服务人员
     cs_status = models.IntegerField(default=1)  # 状态:1正常/2流失/
     update_at = models.DateTimeField(default=timezone.localtime)  # 修改时间
 

@@ -19,7 +19,7 @@ def index(request, pIndex=1):
         where.append('keyword=' + key)
 
     pIndex = int(pIndex)
-    page = Paginator(oblist,10)
+    page = Paginator(oblist,100)
     maxpages = page.num_pages
     if pIndex > maxpages:
         pIndex = maxpages
@@ -98,6 +98,9 @@ def update(request,uid):
         ob.cs_username = request.POST['cs_username']
         ob.cs_password = request.POST['cs_password']
         ob.cs_am = request.POST['cs_am']
+        ob.cs_AddrName = request.POST['cs_AddrName']
+        ob.cs_Address = request.POST['cs_Address']
+        ob.cs_AddrPhone = request.POST['cs_AddrPhone']
         ob.cs_status = request.POST['status']  # 1：正常  2：流失
         ob.update_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ob.save()

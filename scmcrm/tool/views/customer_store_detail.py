@@ -13,16 +13,15 @@ def index(request, cs_id, pIndex=1):
         date = request.body.decode('utf-8')
         print(date)
 
-    # 获取客户名称
+    # 获取客户信息
     ob = Customer.objects.get(id= cs_id)
-    cs_name = ob.cs_name
 
     # 单个客户门店数据
     cs_store_list = CustomerReport.objects.filter(cs_id= cs_id)
 
     # 分页处理
     pIndex = int(pIndex)
-    page = Paginator(cs_store_list, 10)
+    page = Paginator(cs_store_list, 100)
     maxpages = page.num_pages
     if pIndex > maxpages:
         pIndex = maxpages
@@ -33,7 +32,8 @@ def index(request, cs_id, pIndex=1):
 
 
     # 发送页面数据
-    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs_name': cs_name, 'cs_id': cs_id}
+    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs': ob, 'cs_id': cs_id,'url':'customer_store_detail'}
+    print(context)
     return render(request,"Customer_checks/customer_store_detail.html", context)
 
 
@@ -50,7 +50,7 @@ def StoreDueThisMonth(request, cs_id, pIndex=1):
 
     # 分页处理
     pIndex = int(pIndex)
-    page = Paginator(cs_store_list, 10)
+    page = Paginator(cs_store_list, 100)
     maxpages = page.num_pages
     if pIndex > maxpages:
         pIndex = maxpages
@@ -59,10 +59,11 @@ def StoreDueThisMonth(request, cs_id, pIndex=1):
     cs_store_list = page.page(pIndex)  # 获取当前页数据
     plist = page.page_range  # 获取页码列表信息
 
-
-    # 发送页面数据
-    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs_name': cs_name, 'cs_id': cs_id}
+   # 发送页面数据
+    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs': ob, 'cs_id': cs_id,'url':'StoreDueThisMonth'}
+    print(context)
     return render(request,"Customer_checks/customer_store_detail.html", context)
+
 def StoreDueNextMonth(request, cs_id, pIndex=1):
     # 获取客户名称
     ob = Customer.objects.get(id= cs_id)
@@ -78,7 +79,7 @@ def StoreDueNextMonth(request, cs_id, pIndex=1):
 
     # 分页处理
     pIndex = int(pIndex)
-    page = Paginator(cs_store_list, 10)
+    page = Paginator(cs_store_list, 100)
     maxpages = page.num_pages
     if pIndex > maxpages:
         pIndex = maxpages
@@ -89,6 +90,7 @@ def StoreDueNextMonth(request, cs_id, pIndex=1):
 
 
     # 发送页面数据
-    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs_name': cs_name, 'cs_id': cs_id}
+    context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs': ob, 'cs_id': cs_id,'url':'StoreDueNextMonth'}
+    print(context)
     return render(request,"Customer_checks/customer_store_detail.html", context)
 
