@@ -1,6 +1,4 @@
 from django.shortcuts import render,redirect
-from django.contrib import messages
-from django.template import loader
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.db.models import Q

@@ -1,6 +1,6 @@
 # 程序后台子路由
 from django.urls import path
-from .views import index, user, Customer, Customer_checks, customer_store_detail, export_excel
+from .views import index, user, Customer, Customer_checks, customer_store_detail, export_excel, RobotMessagePush
 
 urlpatterns = (
     path("", index.index, name='index'),
@@ -30,5 +30,9 @@ urlpatterns = (
 
     # 导出excel表格
     path('export_excel/', export_excel.export_excel, name='export_excel'),  # 导出表格处理
+
+
+    # 机器人推送
+    path('RobotMessagePush/', RobotMessagePush.RobotMessagePush, name='RobotMessagePush'),  # 导出表格处理
     
 )

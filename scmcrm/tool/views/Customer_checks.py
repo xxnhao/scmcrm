@@ -1,11 +1,9 @@
-from django.shortcuts import render,redirect
-import json
+from django.shortcuts import render
 from django.core.paginator import Paginator
 from datetime import date, timedelta
 from ..models import Customer, CustomerReport
 from django.http import HttpResponse
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
 
 def index(request,pIndex=1):
 

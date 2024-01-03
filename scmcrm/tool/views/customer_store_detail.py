@@ -1,11 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 from django.core.paginator import Paginator
 from datetime import date, timedelta
-from django.db.models.functions import ExtractYear, ExtractMonth
 from ..models import Customer, CustomerReport
-from django.http import HttpResponse
-from django.db.models import Q
-
 
 def index(request, cs_id, pIndex=1):
 
@@ -29,7 +25,6 @@ def index(request, cs_id, pIndex=1):
         pIndex = 1
     cs_store_list = page.page(pIndex)  # 获取当前页数据
     plist = page.page_range  # 获取页码列表信息
-
 
     # 发送页面数据
     context = {"customer_store_detail": cs_store_list, 'plist': plist, 'pIndex': pIndex, 'maxpages': maxpages, 'cs': ob, 'cs_id': cs_id,'url':'customer_store_detail'}
