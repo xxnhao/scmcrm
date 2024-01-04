@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="fb23f97a-b624-4013-ba9d-f4b403c16485" name="华为云服务器" url="http://localhost">
+        <fileTransfer rootFolder="/www/wwwroot/scmscrm_app" accessType="SFTP" host="114.115.151.79" port="22" sshConfigId="fe28429c-13c6-427c-8336-96d44262007e" sshConfig="root@114.115.151.79:22 password">
+          <advancedOptions>
+            <advancedOptions keepAliveTimeout="0" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
