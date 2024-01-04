@@ -165,7 +165,7 @@ def GetStoreData(url, username, pwd):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     }
     # 登录网页
-    url_login = url + "?do=check"
+    url_login = url + "/?do=check"
 
    #print(url_login)
 
@@ -188,13 +188,13 @@ def GetStoreData(url, username, pwd):
     }
 
     # 请求网址，并获取cookie 登录后的cookie
-    response = requests.post(url_login, headers=headers, data=data)
+    response = requests.post(url_login, headers=headers, data=data, timeout=(5, 20))
     cookie = response.cookies
     print("这是登录后的cookie：", cookie.get)
     #print("登录后的返回：：",response.text)
 
     # 继续请求，进入一个门店
-    url_get_store = url + "logistics/?do=selectstore"
+    url_get_store = url + "/logistics/?do=selectstore"
     data = {
         'lsid': "2",
     }
@@ -203,13 +203,13 @@ def GetStoreData(url, username, pwd):
     #print("进入门店后返回：", response.text)
 
     # 进入门店查询功能，老版本需要
-    url_get_tablename = url + "chainsales/head/shop?tablename=sys_user_func"
+    url_get_tablename = url + "/chainsales/head/shop?tablename=sys_user_func"
     requests.get(url_get_tablename, cookies=cookie, headers=headers, data=data)
     print("这是进入门店后的cookie：", cookie.get)
     #print("进入门店查询后的返回：", response.text)
 
     # 获取门店数据
-    url_get_storelist = url + "chainsales/head/shop/listshop?limit=1000"
+    url_get_storelist = url + "/chainsales/head/shop/listshop?limit=1000"
     response = requests.get(url_get_storelist, cookies=cookie, headers=headers, data=data)
     #print("这是获取到的门店列表：", response.json())
 

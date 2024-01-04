@@ -11,7 +11,7 @@ def RobotMessagePush(request):
     #   拼接markdown消息内容
     for i in us:
         print(i.nickname)
-        text = "<font color=\"warning\">"+i.nickname+"</font>，您好,以下客户本月有门店即将到期，请及时处理！。\n"
+        text = "<font color=\"warning\"><@"+i.username+"></font>，您好,以下客户本月有门店即将到期，请及时处理！。\n"
         text2=""
         for key in json.loads(CollateData()):
             print(key['cs_am'], i.nickname)
